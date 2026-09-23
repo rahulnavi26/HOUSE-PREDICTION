@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p test-results
-          python -m pytest ' test_app_50_cases.py' -v \
+          python -m pytest test_app_50_cases.py -v \
             --junitxml=test-results/junit.xml \
             --html=test-results/unit-test-report.html \
             --self-contained-html
