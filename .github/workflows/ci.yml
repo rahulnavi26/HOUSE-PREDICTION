@@ -67,3 +67,44 @@ jobs:
           else:
               raise SystemExit('Flask application did not start')
           PY
+
+  docker:
+    name: Build and smoke test Docker image
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build --tag house-prediction:${{ github.sha }} .
+
+      - name: Start Docker container
+        run: docker run --detach --name house-prediction-ci --publish 5000:5000 house-prediction:${{ github.sha }}
+
+      - name: Smoke test container
+        run: |
+          python - <<'PY'
+          import time
+          from urllib.request import urlopen
+
+          for _ in range(20):
+              try:
+                  with urlopen('http://127.0.0.1:5000/', timeout=2) as response:
+                      if response.status == 200:
+                          print('Docker container responded successfully')
+                          break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Docker container did not respond')
+          PY
+
+      - name: Show container logs
+        if: failure()
+        run: docker logs house-prediction-ci
+
+      - name: Remove Docker container
+        if: always()
+        run: docker rm --force house-prediction-ci
