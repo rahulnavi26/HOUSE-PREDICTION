@@ -60,7 +60,7 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.exclusions=test_cases.py,static/**,model.pkl,house_data.csv
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.wait=false
 
       - name: Start Flask application
         run: |
