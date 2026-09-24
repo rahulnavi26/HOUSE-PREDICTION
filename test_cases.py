@@ -30,7 +30,7 @@ def app_module():
             del sys.modules["app"]
         module = importlib.import_module("app")
 
-    module.app.config.update(TESTING=True)
+    module.app.config.update(TESTING=True, WTF_CSRF_ENABLED=False)
     module.model = DummyModel()
     return module
 

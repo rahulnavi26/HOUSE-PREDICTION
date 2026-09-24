@@ -1,12 +1,18 @@
+import os
+import secrets
+
 from flask import Flask, render_template, request
+from flask_wtf import CSRFProtect
 import numpy as np
 import pickle
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", secrets.token_hex(32))
+csrf = CSRFProtect(app)
 model = pickle.load(open('model.pkl', 'rb'))
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
@@ -25,4 +31,4 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

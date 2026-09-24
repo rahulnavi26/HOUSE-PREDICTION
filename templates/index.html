@@ -14,6 +14,7 @@
     <div class="register_page">
         <div class="form">
             <form action="{{url_for('predict')}}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 Bedrooms: <input type="number" name='bedrooms' placeholder="Enter the no of Bedrooms"><br>
                 Bathrooms: <input type="number" name='bathrooms' placeholder="Enter the no of Bathrooms"><br>
                 Floors: <input type="number" name='floors' placeholder="Enter the no of Floors"><br>
@@ -28,4 +29,4 @@
 
 </body>
 
-</html>
+</html>
